@@ -1,0 +1,133 @@
+<!DOCTYPE HTML>
+<html lang=""en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name=""viewport" content="width=device-width,
+            user-scalable=no, inital-scale=1, maximum-scale=1, user-scalable=0" />
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+            
+        <style type="text/css">
+            body { margin: 0; padding: 0; background: #000;}
+            canvas { display: block; margin: 0 auto; background: #fff; }
+        </style>
+    </head>
+    <body>
+        <canvas id="can" width = '600' height = '300'> </canvas>
+        <script>
+            can = document.getElementById('can');
+            ctx = can.getContext('2d');
+
+            var x = can.width / 2;
+            var y = can.height / 2;
+            var px = 0;
+            var py = 135;
+            var p2x = can.width - 10;
+            var p2y = 135;
+            var dx = 2;
+            var dy = 2;
+            var upPressed = false;
+            var downPressed = false; 
+            var wk = false;
+            var sk = false;
+            
+            document.addEventListener('keydown', keyDownHandler, false);
+            document.addEventListener('keyup', keyUpHandler, false);
+            
+
+            function keyDownHandler(e) {
+                if (e.key == 'Up' || e.key == 'ArrowUp'){
+                    upPressed = true;
+                } else if (e.key == 'Down' || e.key == "ArrowDown"){
+                    downPressed = true;
+                } if (e.key == 'w'){
+                    wk = true;
+                } else if (e.key == 's'){
+                    sk = true;
+                }
+            }
+
+            function keyUpHandler(e) {
+                if (e.key == 'Up' || e.key == 'ArrowUp'){
+                    upPressed = false;
+                } else if (e.key == 'Down' || e.key == "ArrowDown"){
+                    downPressed = false;
+                } if (e.key == 'w'){
+                    wk = false;
+                } else if (e.key == 's'){
+                    sk = false;
+                }
+            }
+
+
+            function ball() {
+                ctx.beginPath();
+                ctx.rect(x,y,20,20);
+                ctx.fillStyle = 'blue';
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            function pad() {
+                ctx.beginPath();
+                ctx.rect(px,py,10,30);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.closePath();
+            }
+
+            function pad2() {
+                ctx.beginPath();
+                ctx.rect(p2x, p2y, 10, 30);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.closePath();
+            }
+            
+
+            function draw() {
+                ctx.clearRect(0,0,can.width, can.height);
+                ball();
+                pad();
+                pad2();
+
+                if (x + dx > can.width || x + dx < 0){
+                    setTimeout(() => {
+                        x = can.width / 2;
+                        y = can.height /2;
+                    }, 400);
+                }
+                
+                if (y + dy > can.height || y + dy < 0){
+                    dy = -dy;
+                }
+                if ((x > px && x < px + 10 && y < py + 30 && y > py - 30) || (x > p2x - 10 && x < p2x + 10 && y < p2y + 30 && y > p2y - 30)){
+                    dx = -dx;
+                } 
+
+
+                if(upPressed && py + 30 < can.height){
+                    py += 7;
+
+                } else if (downPressed && py > 0){
+                    py -= 7;
+                }
+                if(wk && p2y + 30 < can.height){
+                    p2y += 7;
+
+                } else if (sk && p2y > 0){
+                    p2y -= 7;
+                }
+
+                x += dx;
+                y += dy;
+
+                
+            }
+
+            
+            setInterval(draw, 10);
+        </script>
+        
+    </body>
+</html>
